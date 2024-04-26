@@ -53,6 +53,7 @@ public class PurchaseImp implements PurchaseService {
         purchase.setPaymentId(paymentId);
         purchase.setIdUser(userId);
         purchase.setIdCourse(courseId);
+        purchase.setPrice(course.getPrice());
 
         purchaseDao.save(purchase);
 

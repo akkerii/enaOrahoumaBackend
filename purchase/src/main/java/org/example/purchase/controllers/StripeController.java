@@ -29,6 +29,8 @@ public class StripeController {
 
         @PostMapping("/create-payment-intent")
         public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody Map<String, Long> data) throws Exception {
+            Stripe.apiKey = "sk_test_51OvQL1JeISkzjGkftJ4YeJZTGwgr5KxjespCPaAL1BwNNXvtzXZFCRJUEGsZfuqfRO43gXiV4fPDqbnN2YTkmPTA00eGjIguha";
+
             Long amount = data.get("amount");
             return  ResponseEntity.ok(Collections.singletonMap("clientSecret", stripeService.createPaymentIntent(amount)));
         }

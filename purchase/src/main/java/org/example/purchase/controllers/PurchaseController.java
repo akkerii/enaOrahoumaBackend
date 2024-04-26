@@ -4,6 +4,7 @@ package org.example.purchase.controllers;
 import com.pi.cours.models.Course;
 import com.pi.users.entities.User;
 import jakarta.ws.rs.PathParam;
+import org.example.purchase.dto.Purchase;
 import org.example.purchase.externalApi.CourseApi;
 import org.example.purchase.externalApi.UserApi;
 import org.example.purchase.services.PurchaseImp;
@@ -11,6 +12,8 @@ import org.example.purchase.services.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/purchase")
@@ -45,7 +48,10 @@ public class PurchaseController {
     }
 
 
+    @GetMapping("/all")
 
-
+    public List<Purchase> getAllPurchases() {
+        return purchaseService.getAllPurchases();
+    }
 }
 
