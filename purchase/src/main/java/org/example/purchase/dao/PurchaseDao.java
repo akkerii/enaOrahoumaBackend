@@ -12,4 +12,6 @@ public interface PurchaseDao extends JpaRepository<Purchase,Long> {
 
     public List<Purchase> findPurchaseByIdCourse(Long IdCourse);
 
+    public List<Purchase> findPurchasesBySellerId(Integer sellerId);
+
 }

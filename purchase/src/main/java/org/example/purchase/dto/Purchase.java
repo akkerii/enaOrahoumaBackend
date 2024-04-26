@@ -22,6 +22,10 @@ public class Purchase {
 
      private Long idCourse;
 
+     private Integer sellerId ;
+
+     private String paymentId;
+
     @CreationTimestamp
     private Date dateEnrolled;
 }

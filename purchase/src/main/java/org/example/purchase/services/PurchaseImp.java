@@ -2,6 +2,8 @@ package org.example.purchase.services;
 
 import com.pi.cours.models.Course;
 import com.pi.users.entities.User;
+import com.stripe.Stripe;
+import com.stripe.model.PaymentIntent;
 import org.example.purchase.dao.PurchaseDao;
 import org.example.purchase.dto.Purchase;
 import org.example.purchase.externalApi.CourseApi;
@@ -29,7 +31,7 @@ public class PurchaseImp implements PurchaseService {
     @Autowired
     UserApi userApi ;
     @Override
-    public void createPurchase(Long userId , Long courseId) {
+    public void createPurchase(Long userId , Long courseId , String paymentId) {
 
         //
 
@@ -45,7 +47,10 @@ public class PurchaseImp implements PurchaseService {
         }
 */
 
+
         Purchase purchase = new Purchase();
+        purchase.setSellerId(course.getUserId());
+        purchase.setPaymentId(paymentId);
         purchase.setIdUser(userId);
         purchase.setIdCourse(courseId);
 
@@ -120,6 +125,37 @@ public class PurchaseImp implements PurchaseService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<String> getPaymentId(Integer sellerId) {
+        List<Purchase> purchases = purchaseDao.findPurchasesBySellerId(sellerId);
+        List<String> paymentIds = purchases.stream()
+                .map(Purchase::getPaymentId) // Assuming there's a getPaymentId method in your Purchase class
+                .collect(Collectors.toList());
+        return paymentIds;
+    }
+
+
+    public Double getTotalSells(Integer sellerId) {
+        double total = 0.0; // Initialize total to 0
+        List<String> paymentsIdS = getPaymentId(sellerId);
+
+        Stripe.apiKey = "sk_test_51OvQL1JeISkzjGkftJ4YeJZTGwgr5KxjespCPaAL1BwNNXvtzXZFCRJUEGsZfuqfRO43gXiV4fPDqbnN2YTkmPTA00eGjIguha";
+
+        for (String paymentId : paymentsIdS) {
+            try {
+                PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentId);
+                // Stripe amounts are in the smallest currency unit (e.g., cents for USD)
+                double amount = paymentIntent.getAmount() / 100.0;
+                total += amount;
+            } catch (Exception e) {
+                // Handle any exceptions, such as a payment ID not found
+                e.printStackTrace();
+            }
+        }
+
+        return total;
     }
 
 

@@ -10,8 +10,7 @@ import java.util.List;
 public interface PurchaseService {
 
     //create a purchase
-    public void createPurchase(Long userId , Long courseId);
-
+    public void createPurchase(Long userId , Long courseId , String paymentId);
     // list all purchases
     public List<Purchase> getAllPurchases();
 
@@ -35,6 +34,14 @@ public interface PurchaseService {
     //list all user of a course
 
     public List<User> getUsersByIdCourse(Long id);
+
+
+
+    //get list of payments with seller id
+    public List<String> getPaymentId(Integer sellerId);
+
+
+    public Double getTotalSells(Integer sellerId);
 
 
 }
